@@ -9,10 +9,12 @@ function make2dArray(c, r) {
 let grid;
 let column;
 let row;
-let resolution = 10;
+let resolution = 20;
 
 function setup() {
-  createCanvas(600, 400);
+  noLoop();
+  createCanvas(800, 400);
+  frameRate(20);
   column = width / resolution;
   row = height / resolution;
 
@@ -21,8 +23,55 @@ function setup() {
   // fill array with random 0 or 1
   for (let i = 0; i < column; i++) {
     for (let j = 0; j < row; j++) {
-      grid[i][j] = floor(random(2));
+      grid[i][j] = 0;
     }
+  }
+}
+
+function keyPressed(){
+  if (keyCode === ENTER){
+    loop();
+  }
+  if (keyCode === BACKSPACE){
+    clear();
+    background(0);
+    for (let i=0;i<column;i++){
+      for (let j=0;j<row;j++){
+        grid[i][j] = 0;
+      }
+    }
+  }
+  if (keyCode === 32){
+    noLoop();
+  }
+  if (keyCode === 82){
+    for (let i=0;i<column;i++){
+      for (let j=0;j<row;j++){
+        grid[i][j] = floor(random(2));
+        let x = i * resolution;
+        let y = j * resolution;
+        
+        if (grid[i][j] == 1) {
+          fill(50, 50, 250);
+          // fill(10,10,10);
+          stroke(0);
+          rect(x, y, resolution - 1, resolution - 1);
+        }
+      }
+    }
+  }
+}
+
+function mouseClicked(){
+  if (mouseX < width && mouseY < height){
+    newX = mouseX - (mouseX%resolution);
+    newY = mouseY - (mouseY%resolution);
+    newX /=resolution;
+    newY /=resolution;
+    grid[newX][newY] = 1;
+    fill(50, 50, 250);
+    stroke(0);
+    rect(newX*resolution, newY*resolution, resolution, resolution);
   }
 }
 
@@ -35,6 +84,7 @@ function draw() {
 
       if (grid[i][j] == 1) {
         fill(50, 50, 250);
+        // fill(10,10,10);
         stroke(0);
         rect(x, y, resolution - 1, resolution - 1);
       }
